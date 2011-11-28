@@ -26,9 +26,11 @@ Listener.prototype.headersReceived = function(line) {
 	return parseInt(this.headers.len, 10);
 };
 
-Listener.prototype.payloadReceived = function(payload) {
+Listener.prototype.payloadReceived = function(payload, stdout) {
 	if(this.headers && this.headers.eventname){
+		stdout.write("READY 2\nOK");
 		self.emit("event", vals.eventname, this.headers, payload);
+		stdout.write("READY\n");
 	}
 };
 
@@ -43,23 +45,17 @@ Listener.prototype.listen = function(stdin, stdout) {
 		if(self.waitingForHeaders === true && data[data.length - 1] == "\n") {
 			payloadSize = self.headersReceived(data);
 			if(payloadSize == 0){
-				self.payloadReceived("");
+				self.payloadReceived("", stdout);
 				self.waitingForHeaders = true;
 				data = "";
-				stdout.write("READY 2\nOK");				
-				// start it all off
-				stdout.write("READY\n");
 			} else {
 				self.waitingForHeaders = false;
 				data = "";
 			}
 		} else if(self.waitingForHeaders !== true && data.length >= payloadSize) {
-			self.payloadReceived(splitData(data));
+			self.payloadReceived(splitData(data), stdout);
 			self.waitingForHeaders = true;
 			data = "";
-			stdout.write("READY 2\nOK");
-			// start it all off
-			stdout.write("READY\n");
 		}
 	});
 
