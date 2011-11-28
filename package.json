@@ -1,0 +1,7 @@
+{
+	"name": "supervisord-eventlistener",
+	"version": "0.0.1",
+	"description": "Listens for events from supervisord and emits them",
+	"main": "index.js",
+	"engine": "node >= 0.4.1"
+}
