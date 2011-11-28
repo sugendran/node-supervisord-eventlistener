@@ -47,6 +47,8 @@ Listener.prototype.listen = function(stdin, stdout) {
 				self.waitingForHeaders = true;
 				data = "";
 				stdout.write("READY 2\nOK");				
+				// start it all off
+				stdout.write("READY\n");
 			} else {
 				self.waitingForHeaders = false;
 				data = "";
@@ -56,6 +58,8 @@ Listener.prototype.listen = function(stdin, stdout) {
 			self.waitingForHeaders = true;
 			data = "";
 			stdout.write("READY 2\nOK");
+			// start it all off
+			stdout.write("READY\n");
 		}
 	});
 
