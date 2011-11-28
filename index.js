@@ -42,15 +42,22 @@ Listener.prototype.listen = function(stdin, stdout) {
 	stdin.on('data', function(d){
 		var s = d.toString('utf-8');
 		data += s;
-		if(self.waitingForHeaders === true && data[data.length - 1] == "\n") {
-			payloadSize = self.headersReceived(data);
+		if(self.waitingForHeaders === true && s.indexOf("\n") !== -1) {
+			var br = data.indexOf("\n"),
+				headers = data.substring(0, br),
+				payloadSize = self.headersReceived(headers),
+				remainder = data.substr(br + 1);
 			if(payloadSize == 0){
 				self.payloadReceived("", stdout);
 				self.waitingForHeaders = true;
 				data = "";
+			} else if(payloadSize == remainder.length) {
+				self.payloadReceived(splitData(remainder), stdout);
+				self.waitingForHeaders = true;
+				data = "";
 			} else {
 				self.waitingForHeaders = false;
-				data = "";
+				data = remainder;
 			}
 		} else if(self.waitingForHeaders !== true && data.length >= payloadSize) {
 			self.payloadReceived(splitData(data), stdout);
