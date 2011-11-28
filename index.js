@@ -58,6 +58,8 @@ Listener.prototype.listen = function(stdin, stdout) {
 
 	// start it all off
 	this.waitingForHeaders = true;
+	stdin.resume();
+	stdin.setEncoding('utf8');	
 	stdout.write("READY\n");
 };
 
