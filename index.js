@@ -34,6 +34,8 @@ Listener.prototype.payloadReceived = function(payload) {
 
 Listener.prototype.listen = function(stdin, stdout) {
 	var self = this, data = "", payloadSize = 0;
+	stdin.resume();
+	stdin.setEncoding('utf8');
 	stdin.on('data', function(d){
 		var s = d.toString('utf-8');
 		data += s;
@@ -57,9 +59,7 @@ Listener.prototype.listen = function(stdin, stdout) {
 	});
 
 	// start it all off
-	this.waitingForHeaders = true;
-	stdin.resume();
-	stdin.setEncoding('utf8');	
+	this.waitingForHeaders = true;	
 	stdout.write("READY\n");
 };
 
