@@ -12,7 +12,7 @@ Listener.prototype = Object.create(events.EventEmitter.prototype, {
 	}
 });
 
-function splitData(data){
+function splitData(line){
 	var vals = { };
 	line.split(" ").forEach(function(kvp){
 		var data = kvp.split(":");
@@ -28,8 +28,8 @@ Listener.prototype.headersReceived = function(line) {
 
 Listener.prototype.payloadReceived = function(payload, stdout) {
 	if(this.headers && this.headers.eventname){
-		stdout.write("READY 2\nOK");
-		self.emit("event", vals.eventname, this.headers, payload);
+		stdout.write("RESULT 2\nOK");
+		this.emit("event", this.headers.eventname, this.headers, payload);
 		stdout.write("READY\n");
 	}
 };
