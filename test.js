@@ -5,8 +5,10 @@ listener.on('event', function(eventName, headers, data){
 	for(a in headers) {
 		process.stderr.write( a + ": " + headers[a] + "\n");
 	}
-	if(data != "") {
-		process.stderr.write("data:" + ": " + data + "\n");
+	if(data !== "") {
+		for(a in data) {
+			process.stderr.write( a + ": " + data[a] + "\n");
+		}
 	}
 	process.stderr.write("\n\n");
 });

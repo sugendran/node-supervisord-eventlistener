@@ -27,19 +27,20 @@ Listener.prototype.headersReceived = function(line) {
 };
 
 Listener.prototype.payloadReceived = function(payload) {
-	if(this.headers.eventname){
+	if(this.headers && this.headers.eventname){
 		self.emit("event", vals.eventname, this.headers, payload);
 	}
 };
 
 Listener.prototype.listen = function(stdin, stdout) {
 	var self = this, data = "", payloadSize = 0;
+	self.waitingForHeaders = true;
 	stdin.resume();
 	stdin.setEncoding('utf8');
 	stdin.on('data', function(d){
 		var s = d.toString('utf-8');
 		data += s;
-		if(self.waitingForHeaders && data[data.length - 1] == "\n") {
+		if(self.waitingForHeaders === true && data[data.length - 1] == "\n") {
 			payloadSize = self.headersReceived(data);
 			if(payloadSize == 0){
 				self.payloadReceived("");
@@ -50,8 +51,8 @@ Listener.prototype.listen = function(stdin, stdout) {
 				self.waitingForHeaders = false;
 				data = "";
 			}
-		} else if(data.length >= payloadSize) {
-			self.payloadReceived(data);
+		} else if(self.waitingForHeaders !== true && data.length >= payloadSize) {
+			self.payloadReceived(splitData(data));
 			self.waitingForHeaders = true;
 			data = "";
 			stdout.write("READY 2\nOK");
@@ -59,7 +60,6 @@ Listener.prototype.listen = function(stdin, stdout) {
 	});
 
 	// start it all off
-	this.waitingForHeaders = true;	
 	stdout.write("READY\n");
 };
 
