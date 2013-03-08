@@ -57,7 +57,7 @@ Listener.prototype.listen = function(stdin, stdout) {
 			//We now have the headers
 			var br = data.indexOf("\n"),
 				headers = data.substring(0, br),
-				payloadSize = self.headersReceived(headers),
+				payloadSize = self.headersReceived(headers);
 				//ignore "\n" and put remainder back into `data`
 				data = data.substr(br + 1);
 			if(payloadSize == 0) {
