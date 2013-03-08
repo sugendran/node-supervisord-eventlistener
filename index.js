@@ -34,6 +34,7 @@ Listener.prototype.payloadReceived = function(payload, stdout) {
 	if(this.headers && this.headers.eventname) {
 		stdout.write("RESULT 2\nOK");
 		this.emit("event", this.headers.eventname, this.headers, payload);
+		this.emit(this.headers.eventname, this.headers, payload);
 		stdout.write("READY\n");
 	}
 };
