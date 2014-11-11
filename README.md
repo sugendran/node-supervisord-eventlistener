@@ -8,6 +8,8 @@ This library implements a Supervisord event listener for Node.js.
 
 ## Usage
 
+**Sample Node.js Program**
+
 ```javascript
 var supervisor = require("supervisord-eventlistener");
 supervisor.on("event", function(type, headers, data) {
@@ -24,6 +26,15 @@ supervisor.on("PROCESS_STATE_STOPPING", function(headers, data) {
 });
 supervisor.listen(process.stdin, process.stdout);
 ```
+
+**Sample Supervisor Configuration**
+
+```
+[eventlistener:monitoring]
+command = /usr/bin/nodejs /home/user/your_node_program.js
+events = PROCESS_STATE,PROCESS_COMMUNICATION,SUPERVISOR_STATE_CHANGE
+```
+
 
 ### More Documentation
 
