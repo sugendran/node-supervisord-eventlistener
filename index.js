@@ -13,12 +13,18 @@ util.inherits(Listener, EventEmitter);
 	The key and value in the key-value pair are separated by a colon `:`
 	Example line: `process_name:foo group_name:bar pid:123`
 */
-function splitData(line) {
+function splitData(raw) {
+	var lines = raw.split( "\n" );
+	var line = lines[0];
 	var vals = {};
 	line.split(" ").forEach(function(kvp){
 		var data = kvp.split(":");
 		vals[data[0]] = data[1];
 	});
+	if ( lines.length > 1 ) {
+		lines.splice( 0 , 1 );
+		vals.body = lines;
+	}
 	return vals;
 }
 
