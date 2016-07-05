@@ -1,6 +1,6 @@
 {
 	"name": "supervisord-eventlistener",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "Listens for events from supervisord and emits them",
 	"keywords": ["supervisord"],
 	"author": "Sugendran Ganess",
